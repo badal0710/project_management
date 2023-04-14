@@ -11,6 +11,9 @@
 .mtj.tmp/
 
 # Package Files #
+src/main/java/com/service/project_management/config/*.java
+src/main/resources/*.yml
+src/main/resources/application.yml
 *.jar
 *.war
 *.nar
@@ -21,3 +24,5 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+src/main/resources/application.yml
+target/classes/application.yml
