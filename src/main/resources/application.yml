@@ -1,14 +1,14 @@
 server:
-  port: ${APPLICATION_PORT}
+  port: 9090
 
 spring:
   mvc:
     pathmatch:
-      matching-strategy: ant_path_matcher
+      matching-strategy: ANT_PATH_MATCHER
   datasource:
-    password: ${DATABASE_PASSWORD}
-    url: ${DATABASE_URL}
-    username: ${DATABASE_USERNAME}
+    url: jdbc:mysql://localhost:3306/test_three
+    username: root
+    password:
     driver-class-name : com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
