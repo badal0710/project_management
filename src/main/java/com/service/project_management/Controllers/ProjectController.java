@@ -45,11 +45,11 @@ public class ProjectController {
 
     @PostMapping(value = "/create-project",produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponse(code = 500, message = "++++++++++++++++++")
-    public ResponseEntity<Object> createProject( @RequestBody @Valid ProjectDto projectDto) {
+    public ResponseEntity<Object> createProject( @RequestBody @Valid Project projectDto) {
 
 
         try {
-            ProjectDto createProject = this.projectService.createProject(projectDto);
+            Project createProject = this.projectService.createProject(projectDto);
             return ResponseEntity.ok(HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Unable to create project " + e);
@@ -87,7 +87,7 @@ public class ProjectController {
         try {
             this.projectRepo.deleteById(projectId);
             return ResponseEntity.ok().body("project is deleted");
-        } catch (EmptyResultDataAccessException e) {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body("unable to delete project");
         }
     }

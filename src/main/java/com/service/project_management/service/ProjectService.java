@@ -3,6 +3,7 @@ package com.service.project_management.service;
 
 import com.service.project_management.Entities.*;
 import com.service.project_management.Repositories.Investor_ProjectRepo;
+import com.service.project_management.Repositories.ProjectLocationRepo;
 import com.service.project_management.Repositories.ProjectRepo;
 import com.service.project_management.Repositories.TaskDetailRepo;
 import com.service.project_management.dto.ProjectDto;
@@ -35,6 +36,9 @@ public class ProjectService {
 
     @Autowired
     Investor_ProjectRepo investorProjectRepo;
+
+    @Autowired
+    ProjectLocationRepo projectLocationRepo;
 
 
     public Optional<Project> getProjectById(Integer projectId) {
@@ -197,12 +201,16 @@ public class ProjectService {
     }
 
 
-    public ProjectDto createProject(ProjectDto projectDto) {
-        Project Pro = this.dtoToProject(projectDto);
-
-        Project savedUser = this.projectRepo.save(Pro);
-
-        return this.projectToDto(savedUser);
+    public Project createProject(Project projectDto) {
+        // Project Pro = this.dtoToProject(projectDto);
+        ProjectLocation projectLocation = projectDto.getProjectLocation();
+        ProjectLocation projectLocation2 = projectLocationRepo.findExisitingRecord(projectLocation.getArea(),projectLocation.getCity(),projectLocation.getState());
+        if(projectLocation2!=null){
+            projectDto.setProjectLocation(projectLocation2);
+        }
+        Project savedUser = this.projectRepo.save(projectDto);
+        return savedUser;
+        // return this.projectToDto(savedUser);
 
 
     }
