@@ -86,6 +86,9 @@ public class ProjectService {
 
             ProjectLocation pro = new ProjectLocation();
             pro.setProjectLocationId(projectDto.getProjectLocationId());
+            pro.setArea(projectDto.getArea());
+            pro.setCity(projectDto.getCity());
+            pro.setState(projectDto.getState());
             project1.setProjectLocation(pro);
 
 

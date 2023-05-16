@@ -49,6 +49,12 @@ public class ProjectDto {
 
     private Integer projectLocationId;
 
+    private String state;
+
+    private String city;
+
+    private String area;
+
 
 
 
