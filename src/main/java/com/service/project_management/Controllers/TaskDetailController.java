@@ -6,6 +6,7 @@ import com.service.project_management.Repositories.TaskDetailRepo;
 import com.service.project_management.dto.ProjectDto;
 import com.service.project_management.dto.TaskDtos.TaskDetailDto;
 import com.service.project_management.exceptions.resourceNotFoundException;
+import com.service.project_management.service.ProjectService;
 import com.service.project_management.service.TaskDetailService;
 import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ public class TaskDetailController {
     TaskDetailService taskDetailService;
     @Autowired
     TaskDetailRepo taskDetailRepo;
+    @Autowired
+    ProjectService projectService;
 
 //    @GetMapping("/{projectId}/")
 //    public ResponseEntity<Object> getTaskDetail(@PathVariable Integer projectId){
@@ -43,6 +46,11 @@ public class TaskDetailController {
 //        return ResponseEntity.ok().body(Map.of("taskName","success","data",Taskofproject1));
 //
 //    }
+
+    @GetMapping("/getOneTask/{id}")
+    public TaskDetails getOneTask(@PathVariable("id") Integer taskId){
+        return projectService.getOneTaskDetail(taskId);
+    }
 
 
     //create taskdetails

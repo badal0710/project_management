@@ -10,4 +10,8 @@ public interface ProjectLocationRepo extends JpaRepository<ProjectLocation,Integ
     @Query(value = "select * from project_location p where p.area= :area and p.city= :city and p.state= :state",nativeQuery = true)
     ProjectLocation findExisitingRecord(@Param("area")String area,@Param("city")String city,@Param("state")String state );
 
+    // findLocationById
+    @Query(value = "select * from project_location p where p.project_location_id= :id",nativeQuery = true)
+    ProjectLocation findLocationById(@Param("id")Integer id );
+
 }

@@ -1,5 +1,6 @@
 package com.service.project_management.service;
 
+import com.service.project_management.Entities.Investor;
 import com.service.project_management.Entities.Investor_Project;
 import com.service.project_management.Repositories.InvestorRepo;
 import com.service.project_management.Repositories.Investor_ProjectRepo;
@@ -19,8 +20,17 @@ public class InvestorService {
    @Autowired
    private InvestorRepo investorRepo;
 
-   @Autowired
+    @Autowired
     private Investor_ProjectRepo investorProjectRepo;
+
+    public List<Investor> getAllInvestor() {
+        List<Investor> allproject = investorRepo.findAll();
+        return allproject;
+    }
+
+    public Integer countInvestor() {
+        return investorRepo.countInvestor();
+    }
 
     public List<Investor_Project> getAllInvesterProjects(Integer investorId) {
         List<Investor_Project> projects = investorProjectRepo.findByInvestorId(investorId);

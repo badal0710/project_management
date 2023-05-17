@@ -22,6 +22,16 @@ public class InvestorController {
     @Autowired
     InvestorRepo investorRepo;
 
+    @GetMapping("/allInvestor")
+        public ResponseEntity<Object> getAllInvestor() {
+        return ResponseEntity.ok().body(this.investorService.getAllInvestor());
+    }
+
+    @GetMapping("/totalInvestor")
+    public Integer totaInvestor(){
+        return investorService.countInvestor();
+    }
+
     @GetMapping("/{investorId}/")
     public ResponseEntity<Object> getProjects(@PathVariable Integer investorId,
             @RequestParam(defaultValue = "0", required = false) Integer projectId,

@@ -18,13 +18,18 @@ import java.util.Objects;
 import java.util.Optional;
 
 @RestController
-
+@RequestMapping("/contractor")
 public class ContractorController {
 
     @Autowired
     ContractorService contractorService;
     @Autowired
     ContractorRepo contractorRepo;
+
+    @GetMapping("/totalContractor")
+    public Integer totaContractor(){
+        return contractorService.countContractor();
+    }
 
     @PostMapping("/create-contractor")
     public ResponseEntity<Contractor> createContractor(@Valid @RequestBody Contractor contractor){
@@ -33,7 +38,10 @@ public class ContractorController {
 
     }
 
-
+    @GetMapping("/allContractor")
+        public ResponseEntity<Object> getAllContractor() {
+        return ResponseEntity.ok().body(this.contractorService.getAllContractor());
+    }
 
     @PutMapping("/update-contractor/{id}")
     public Contractor contractorUpdateById(@PathVariable("id") Integer contractorId,@RequestBody Contractor contractor){

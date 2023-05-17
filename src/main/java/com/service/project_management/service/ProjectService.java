@@ -7,6 +7,7 @@ import com.service.project_management.Repositories.ProjectLocationRepo;
 import com.service.project_management.Repositories.ProjectRepo;
 import com.service.project_management.Repositories.TaskDetailRepo;
 import com.service.project_management.dto.ProjectDto;
+import com.service.project_management.dto.ProjectDtoCreate;
 import com.service.project_management.dto.TaskDtos.TaskDetailDto;
 import com.service.project_management.dto.TaskDtos.TaskDetailForTheProject;
 import org.modelmapper.ModelMapper;
@@ -119,12 +120,19 @@ public class ProjectService {
 
     //for the Task details
 
-    public List<TaskDetailDto> getSomeDetail(Integer project_id) {
+    public List<TaskDetails> getSomeDetail(Integer project_id) {
         List<TaskDetails> tdo = taskDetailRepo.getProjectTaskDetail(project_id);
-        List<TaskDetailDto> tyd = tdo.stream().map(td -> this.taskToDto(td)).collect(Collectors.toList());
+        // List<TaskDetailDto> tyd = tdo.stream().map(td -> this.taskToDto(td)).collect(Collectors.toList());
+        return tdo;
+    }
 
+    public Integer countProject() {
+        return projectRepo.countProject();
+    }
 
-        return tyd;
+    public TaskDetails getOneTaskDetail(Integer task_id) {
+        TaskDetails tdo = taskDetailRepo.getOneTaskDetail(task_id);
+        return tdo;
     }
 
 
@@ -201,16 +209,21 @@ public class ProjectService {
     }
 
 
-    public Project createProject(Project projectDto) {
-        // Project Pro = this.dtoToProject(projectDto);
-        ProjectLocation projectLocation = projectDto.getProjectLocation();
-        ProjectLocation projectLocation2 = projectLocationRepo.findExisitingRecord(projectLocation.getArea(),projectLocation.getCity(),projectLocation.getState());
-        if(projectLocation2!=null){
-            projectDto.setProjectLocation(projectLocation2);
-        }
-        Project savedUser = this.projectRepo.save(projectDto);
+    public Project createProject(ProjectDtoCreate projectDto) {
+        
+        Integer locationID = projectDto.getProjectLocationId();
+        ProjectLocation projectLocation = projectLocationRepo.findLocationById(locationID);
+        
+        Project project=new Project();
+        project.setProjectName(projectDto.getProjectName());
+        project.setProjectDeadline(projectDto.getProjectDeadline());
+        project.setProjectStartingDate(projectDto.getProjectStartingDate());
+        project.setProjectStatus(projectDto.getProjectStatus());
+        project.setProjectTypeName(projectDto.getProjectTypeName());
+        project.setProjectLocation(projectLocation);
+
+        Project savedUser = this.projectRepo.save(project);
         return savedUser;
-        // return this.projectToDto(savedUser);
 
 
     }

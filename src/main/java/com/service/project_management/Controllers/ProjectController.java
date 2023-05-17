@@ -4,9 +4,11 @@ import com.service.project_management.CustomValidation.ValidateProjectStatus;
 import com.service.project_management.Entities.Investor;
 import com.service.project_management.Entities.Investor_Project;
 import com.service.project_management.Entities.Project;
+import com.service.project_management.Entities.TaskDetails;
 import com.service.project_management.Repositories.InvestorRepo;
 import com.service.project_management.Repositories.ProjectRepo;
 import com.service.project_management.dto.ProjectDto;
+import com.service.project_management.dto.ProjectDtoCreate;
 import com.service.project_management.dto.TaskDtos.TaskDetailDto;
 import com.service.project_management.dto.TaskDtos.TaskDetailForTheProject;
 import com.service.project_management.exceptions.resourceNotFoundException;
@@ -45,7 +47,7 @@ public class ProjectController {
 
     @PostMapping(value = "/create-project",produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponse(code = 500, message = "++++++++++++++++++")
-    public ResponseEntity<Object> createProject( @RequestBody @Valid Project projectDto) {
+    public ResponseEntity<Object> createProject( @RequestBody @Valid ProjectDtoCreate projectDto) {
 
 
         try {
@@ -54,6 +56,11 @@ public class ProjectController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Unable to create project " + e);
         }
+    }
+
+    @GetMapping("/totalProject")
+    public Integer totaProject(){
+        return projectRepo.countProject();
     }
 
     @GetMapping("/{projectId}")
@@ -129,7 +136,7 @@ public class ProjectController {
             throw new resourceNotFoundException("project", "projectID", projectId);
         } else {
             if (starting_date == null && ending_date == null) {
-                List<TaskDetailDto> Taskofproject1 = projectService.getSomeDetail(projectId);
+                List<TaskDetails> Taskofproject1 = projectService.getSomeDetail(projectId);
 
                 return ResponseEntity.ok().body(Taskofproject1);
 
