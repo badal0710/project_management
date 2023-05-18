@@ -16,6 +16,9 @@ public interface Investor_ProjectRepo  extends JpaRepository<Investor_Project,In
     @Query(value = "select * from investor_project pi where pi.investor_id = :i_id and pi.project_id = :p_id",nativeQuery = true)
     Optional<Investor_Project> findProjectByIp(@Param("i_id")Integer investorId,@Param("p_id") Integer projectId);
 
+    @Query(value = "delete from investor_project pi where pi.investor_project_id = :i_id",nativeQuery = true)
+    Integer deleteOneProjectInvestor(@Param("i_id")Integer Id);
+
     @Query(value = "select * from investor_project pi where pi.investor_id= :i_id and pi.state= :l_name",nativeQuery = true)
     List<Investor_Project> findProjectLocationByInvestorId(@Param("i_id")Integer investorId,@Param("l_name") String projectLocationName);
 

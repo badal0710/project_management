@@ -36,8 +36,4 @@ public class Investor_Project implements Serializable {
    @Column(name = "invested_share" )
    private Integer investedShare;
 
-
-
-
-
 }

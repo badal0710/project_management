@@ -19,10 +19,15 @@ public class ContractorService {
     ContractorRepo contractorRepo;
 
 
-    public Contractor createContractor(Contractor contractor) {
-
-        return contractorRepo.save(contractor);
-
+    public Integer createContractor(Contractor contractor) {
+        int status = 0;
+        try {
+            contractorRepo.save(contractor);
+            status = 200;
+        } catch (Exception e) {
+            status = 500;
+        }
+        return status;
     }
 
     public List<Contractor> getAllContractor() {
@@ -78,13 +83,17 @@ public class ContractorService {
     }
 
 
-    public ResponseEntity<Boolean> deleteContractor(Integer contractorId) {
-        boolean isDeleted = false;
-
+    public Integer deleteContractor(Integer contractorId) {
+        
+        int status = 0;
+        try {
             this.contractorRepo.deleteById(contractorId);
-            isDeleted = true;
-            return ResponseEntity.ok(isDeleted);
-
+            status=200;
+        } catch (Exception e) {
+            System.out.println("error while deleting contractor: "+e.getMessage());
+            status=500;
+        }
+        return status;
 
     }
 

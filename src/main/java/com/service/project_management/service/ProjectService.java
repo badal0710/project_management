@@ -47,6 +47,11 @@ public class ProjectService {
         return projects;
     }
 
+    public Project getOneProject(Integer projectId) {
+        Project projects = projectRepo.getOneProject(projectId);
+        return projects;
+    }
+
     public List<Project> getAllProject() {
         List<Project> allproject = projectRepo.findAll();
         return allproject;

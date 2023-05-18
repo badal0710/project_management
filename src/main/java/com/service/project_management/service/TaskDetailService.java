@@ -2,9 +2,13 @@ package com.service.project_management.service;
 
 
 import com.service.project_management.Entities.*;
+import com.service.project_management.Repositories.ContractorRepo;
+import com.service.project_management.Repositories.ProjectRepo;
 import com.service.project_management.Repositories.TaskDetailRepo;
 import com.service.project_management.dto.ProjectDto;
 import com.service.project_management.dto.TaskDtos.TaskDetailDto;
+import com.service.project_management.dto.TaskDtos.TaskDetailForCreate;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,88 +20,124 @@ import java.util.Optional;
 @Service
 public class TaskDetailService {
 
-
-
-
-
     @Autowired
     TaskDetailRepo taskDetailRepo;
 
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private ContractorRepo contractorRepo;
+
+    @Autowired
+    private ProjectRepo projectRepo;
+
 
 
     //Crud of task
-     public TaskDetailDto createTask(TaskDetailDto taskDetailDto){
+     public Integer createTask(TaskDetailForCreate taskDetail){
+        int status = 0;
+        try {
+            TaskDetails saveme = new TaskDetails(); 
 
-         TaskDetails tc=this.dtoToTask1(taskDetailDto);
+            Contractor c = contractorRepo.getOneContractor(taskDetail.getContractorId());
+            saveme.setContractor(c);
 
-         TaskDetails savedUser=this.taskDetailRepo.save(tc);
+            Project p = projectRepo.getOneProject(taskDetail.getContractorId());
+            saveme.setProject(p);
 
-         return  this.taskToDto1(savedUser);
+            saveme.setTaskDeadLine(taskDetail.getTaskDeadLine());
+            saveme.setTaskName(taskDetail.getTaskName());
+            saveme.setTaskStatus(taskDetail.getTaskStatus());
+            saveme.setTaskStartingDate(taskDetail.getTaskStartingDate());
+            saveme.setAllocatedBudget(taskDetail.getAllocatedBudget());
 
+            taskDetailRepo.save(saveme);
+
+            status =  200;
+        } catch (Exception e) {
+            System.out.println("error while creating taskdetail: "+e.getMessage());
+            status = 500;
+        }
+
+        return status;
 
      }
 
 
 
-    public Optional<TaskDetailDto> updateTask(Integer taskId, TaskDetailDto taskDetailDto) {
+    public Integer updateTask(Integer taskId, TaskDetailDto taskDetailDto) {
 
+        Integer status = 0;
 
-        TaskDetails taskDetails = this.taskDetailRepo.findById(taskId).get();
-
-
-        if (Objects.nonNull(taskDetailDto.getTaskName())
-                && !"".equalsIgnoreCase(taskDetailDto.getTaskName())) {
+        try {
+            TaskDetails taskDetails = this.taskDetailRepo.findById(taskId).get();
 
             taskDetails.setTaskName(taskDetailDto.getTaskName());
-        }
-
-        if (Objects.nonNull(taskDetailDto.getTaskStatus())
-                && !"".equalsIgnoreCase(String.valueOf(taskDetailDto.getTaskStatus()))) {
             taskDetails.setTaskStatus(taskDetailDto.getTaskStatus());
-        }
-
-
-        if (Objects.nonNull(taskDetailDto.getTaskDeadLine())
-                && !"".equalsIgnoreCase(String.valueOf(taskDetailDto.getTaskDeadLine()))) {
             taskDetails.setTaskDeadLine(taskDetailDto.getTaskDeadLine());
-        }
-
-        if (Objects.nonNull(taskDetailDto.getTaskStartingDate())
-                && !"".equalsIgnoreCase(String.valueOf(taskDetailDto.getTaskStartingDate()))) {
             taskDetails.setTaskStartingDate(taskDetailDto.getTaskStartingDate());
-        }
 
-        if (Objects.nonNull(taskDetailDto.getAllocatedBudget())
-                && !"".equalsIgnoreCase(String.valueOf(taskDetailDto.getAllocatedBudget()))) {
             taskDetails.setAllocatedBudget(taskDetailDto.getAllocatedBudget());
-        }
 
-        if (Objects.nonNull(taskDetailDto.getContractorId())
-                && !"".equalsIgnoreCase(String.valueOf(taskDetailDto.getContractorId()))) {
-
-            Contractor contractor=new Contractor();
-            contractor.setContractorId(taskDetailDto.getContractorId());
+            Contractor contractor = contractorRepo.getOneContractor(taskDetailDto.getContractorId());
             taskDetails.setContractor(contractor);
 
-
-        }
-
-        if (Objects.nonNull(taskDetailDto.getProjectId())
-                && !"".equalsIgnoreCase(String.valueOf(taskDetailDto.getProjectId()))) {
-
-            Project project=new Project();
-            project.setProjectId(taskDetailDto.getProjectId());
+            Project project = projectRepo.getOneProject(taskDetailDto.getProjectId());
             taskDetails.setProject(project);
 
+            this.taskDetailRepo.save(taskDetails);
+            status = 200;
 
+        } catch (Exception e) {
+            System.out.println("Error occur while Updating Task: "+e.getMessage());
+            status = 500;
         }
-        TaskDetails taskDetails1=this.taskDetailRepo.save(taskDetails);
 
-        return Optional.ofNullable(this.modelMapper.map(taskDetails1, TaskDetailDto.class));
+        return status;
 
+        // TaskDetails taskDetails = this.taskDetailRepo.findById(taskId).get();
+
+        // if (Objects.nonNull(taskDetailDto.getTaskName())
+        //         && !"".equalsIgnoreCase(taskDetailDto.getTaskName())) {
+        //     taskDetails.setTaskName(taskDetailDto.getTaskName());
+        // }
+
+        // if (Objects.nonNull(taskDetailDto.getTaskStatus())
+        //         && !"".equalsIgnoreCase(String.valueOf(taskDetailDto.getTaskStatus()))) {
+        //     taskDetails.setTaskStatus(taskDetailDto.getTaskStatus());
+        // }
+
+        // if (Objects.nonNull(taskDetailDto.getTaskDeadLine())
+        //         && !"".equalsIgnoreCase(String.valueOf(taskDetailDto.getTaskDeadLine()))) {
+        //     taskDetails.setTaskDeadLine(taskDetailDto.getTaskDeadLine());
+        // }
+
+        // if (Objects.nonNull(taskDetailDto.getTaskStartingDate())
+        //         && !"".equalsIgnoreCase(String.valueOf(taskDetailDto.getTaskStartingDate()))) {
+        //     taskDetails.setTaskStartingDate(taskDetailDto.getTaskStartingDate());
+        // }
+
+        // if (Objects.nonNull(taskDetailDto.getAllocatedBudget())
+        //         && !"".equalsIgnoreCase(String.valueOf(taskDetailDto.getAllocatedBudget()))) {
+        //     taskDetails.setAllocatedBudget(taskDetailDto.getAllocatedBudget());
+        // }
+
+        // if (Objects.nonNull(taskDetailDto.getContractorId())
+        //         && !"".equalsIgnoreCase(String.valueOf(taskDetailDto.getContractorId()))) {
+
+        //     Contractor contractor=new Contractor();
+        //     contractor.setContractorId(taskDetailDto.getContractorId());
+        //     taskDetails.setContractor(contractor);
+        // }
+
+        // if (Objects.nonNull(taskDetailDto.getProjectId())
+        //         && !"".equalsIgnoreCase(String.valueOf(taskDetailDto.getProjectId()))) {
+
+        //     Project project=new Project();
+        //     project.setProjectId(taskDetailDto.getProjectId());
+        //     taskDetails.setProject(project);
+        // }
     }
 
     public ResponseEntity<Boolean> deleteTask(Integer taskId) {

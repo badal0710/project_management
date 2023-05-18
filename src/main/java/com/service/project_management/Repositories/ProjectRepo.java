@@ -15,6 +15,9 @@ public interface ProjectRepo extends JpaRepository<Project,Integer> {
     @Query(value = "select count(project_id) from project", nativeQuery = true)
     Integer countProject();
 
+    @Query(value = "select * from project where project_id= :id", nativeQuery = true)
+    Project getOneProject(@Param("id")Integer projectId);
+
     @Query(value = "select * from project p where p.project_location_id= :l_id",nativeQuery = true)
     List<Project> findProjectByLocation(@Param("l_id")Integer locationId);
 

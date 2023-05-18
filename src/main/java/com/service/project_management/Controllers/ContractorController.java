@@ -32,9 +32,10 @@ public class ContractorController {
     }
 
     @PostMapping("/create-contractor")
-    public ResponseEntity<Contractor> createContractor(@Valid @RequestBody Contractor contractor){
-        Contractor createCategory=this.contractorService.createContractor(contractor);
-        return new ResponseEntity<Contractor>(HttpStatus.CREATED);
+    public Integer createContractor(@Valid @RequestBody Contractor contractor){
+        System.out.println(contractor);
+        Integer status=this.contractorService.createContractor(contractor);
+        return status;
 
     }
 
@@ -54,13 +55,13 @@ public class ContractorController {
     }
 
     @DeleteMapping("/delete-contractor/{id}")
-    public ResponseEntity<Object> deleteContractor(@PathVariable("id") Integer contractorId){
+    public Integer deleteContractor(@PathVariable("id") Integer contractorId){
         Optional<Contractor> mycontractor = contractorRepo.findById(contractorId);
         if(!mycontractor.isPresent()){
             throw new resourceNotFoundException("contractor", "contractorID", contractorId);
         }else{
-            this.contractorService.deleteContractor(contractorId);
-            return ResponseEntity.ok().body("Contractor is deleted");
+            int status = this.contractorService.deleteContractor(contractorId);
+            return status;
         }
     }
 }

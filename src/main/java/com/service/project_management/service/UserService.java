@@ -16,6 +16,16 @@ public class UserService {
         return this.userRepo.save(user);
     }
 
+    public Integer authorizeUser(String email,String type){
+        int status = 0;
+        try {
+            status = userRepo.authorizeUser(email,type);
+        } catch (Exception e) {
+            status=500;
+        }
+        return status;
+    }
+
     public Integer findByMail(String email) {
         String typeofUser = this.userRepo.findByEmail(email);
         if (typeofUser != null && typeofUser.equals("admin")) {

@@ -9,4 +9,7 @@ public interface ContractorRepo extends JpaRepository<Contractor,Integer> {
 
     @Query(value = "select count(contractor_id) from contractor", nativeQuery = true)
     Integer countContractor();
+
+    @Query(value = "select * from contractor where contractor_id=:id", nativeQuery = true)
+    Contractor getOneContractor(@Param("id")Integer cid);
 }

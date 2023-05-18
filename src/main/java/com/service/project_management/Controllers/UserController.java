@@ -32,4 +32,12 @@ public class UserController {
     public Integer login(@RequestBody LoginRequest body){
         return this.userService.loginUser(body);
     }
+
+    @GetMapping("/authorizeUser/{email}/{type}")
+    public Integer authorizeUser(@PathVariable String email,@PathVariable String type){
+        System.out.println("user email and type: "+email+" => "+type);
+        Integer status=this.userService.authorizeUser(email,type);
+        System.out.println("user code: "+status);
+        return status;
+    }
 }
