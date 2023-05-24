@@ -35,9 +35,9 @@ public class UserController {
 
     @GetMapping("/authorizeUser/{email}/{type}")
     public Integer authorizeUser(@PathVariable String email,@PathVariable String type){
-        System.out.println("user email and type: "+email+" => "+type);
+        // System.out.println("user email and type: "+email+" => "+type);
         Integer status=this.userService.authorizeUser(email,type);
-        System.out.println("user code: "+status);
+        // System.out.println("user code: "+status);
         return status;
     }
 }

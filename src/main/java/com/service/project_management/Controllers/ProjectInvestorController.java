@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.service.project_management.Entities.Investor_Project;
+import com.service.project_management.Repositories.InvestorRepo;
 import com.service.project_management.Repositories.Investor_ProjectRepo;
 import com.service.project_management.dto.ProjectInvestor;
 import com.service.project_management.exceptions.resourceNotFoundException;
@@ -28,6 +29,17 @@ public class ProjectInvestorController {
 
     @Autowired
     private InvestorService investorService;
+
+    @Autowired
+    private InvestorRepo investorRepo;
+
+    @GetMapping("/getInvestedAmount/{email}/{projectid}")
+    public ResponseEntity<Integer> getInvestedAmount(@PathVariable("email") String email, @PathVariable("projectid") Integer projectId){
+        System.out.println(email+" = "+projectId);
+        int investorId = investorRepo.getInvestorId(email);
+        Integer data = this.investor_ProjectRepo.getInvestedAmount(investorId,projectId);
+        return ResponseEntity.ok().body(data);
+    }
 
     @GetMapping("/getAll")
     public ResponseEntity<Object> getAll(){
