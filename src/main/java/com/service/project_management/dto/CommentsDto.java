@@ -24,6 +24,8 @@ private LocalDate comment_date;
 
 private Integer TaskId;
 
+private Integer contractorId;
+
 
 
 
