@@ -82,9 +82,14 @@ public class ProjectController {
         return ResponseEntity.ok().body(this.projectService.getAllProject());
     }
 
+    @GetMapping("/getAllProjectOfOneInvestor/{investorEmail}")
+        public ResponseEntity<Object> getAllProject(@PathVariable("investorEmail") String investorEmail) {
+        return ResponseEntity.ok().body(this.projectService.getAllProject(investorEmail));
+    }
+
     @PutMapping("/update-project/{projectId}")
     public ResponseEntity<Object> updateProject(@PathVariable("projectId") Integer projectId,
-            @RequestBody ProjectDto projectDto) throws Exception {
+            @RequestBody @Valid ProjectDto projectDto) throws Exception {
         Optional<ProjectDto> project1 = projectService.updateProjectById(projectId, projectDto);
         return ResponseEntity.ok(HttpStatus.OK);
     }

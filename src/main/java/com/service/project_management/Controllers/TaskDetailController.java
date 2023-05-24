@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -50,6 +51,11 @@ public class TaskDetailController {
     // ResponseEntity.ok().body(Map.of("taskName","success","data",Taskofproject1));
     //
     // }
+
+    @GetMapping("/all-task")
+    public List<TaskDetails> getOneTask() {
+        return taskDetailService.allTask();
+    }
 
     @GetMapping("/getOneTask/{id}")
     public TaskDetails getOneTask(@PathVariable("id") Integer taskId) {

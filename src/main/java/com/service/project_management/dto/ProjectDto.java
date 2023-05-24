@@ -9,6 +9,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -42,7 +44,7 @@ public class ProjectDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate projectDeadline;
 
-
+    @NotNull(message = "pleae")
     private String projectTypeName;
 
 

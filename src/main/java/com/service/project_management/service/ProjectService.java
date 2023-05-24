@@ -2,6 +2,7 @@ package com.service.project_management.service;
 
 
 import com.service.project_management.Entities.*;
+import com.service.project_management.Repositories.InvestorRepo;
 import com.service.project_management.Repositories.Investor_ProjectRepo;
 import com.service.project_management.Repositories.ProjectLocationRepo;
 import com.service.project_management.Repositories.ProjectRepo;
@@ -39,7 +40,16 @@ public class ProjectService {
     Investor_ProjectRepo investorProjectRepo;
 
     @Autowired
+    InvestorRepo investorRepo;
+
+    @Autowired
     ProjectLocationRepo projectLocationRepo;
+
+    public List<Investor_Project> getAllProject(String investorEmail) {
+        Integer investorId=investorRepo.getInvestorId(investorEmail);
+        List<Investor_Project> InvestorProjects=investorProjectRepo.findByInvestorId(investorId);
+        return InvestorProjects;
+        }
 
 
     public Optional<Project> getProjectById(Integer projectId) {

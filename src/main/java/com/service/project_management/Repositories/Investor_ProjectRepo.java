@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface Investor_ProjectRepo  extends JpaRepository<Investor_Project,Integer> {
 
-    @Query(value = "select * from investor_project pi where pi.investor_id =?1",nativeQuery = true)
+    @Query(value = "select pi.investor_project_id, pi.invested_share, pi.investor_id,pi.project_id from investor_project pi where pi.investor_id =?1",nativeQuery = true)
     List<Investor_Project> findByInvestorId(Integer investorId);
 
     @Query(value = "select * from investor_project pi where pi.investor_id = :i_id and pi.project_id = :p_id",nativeQuery = true)
