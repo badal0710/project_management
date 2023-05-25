@@ -1,4 +1,4 @@
-package com.service.project_management.dto;
+package com.service.project_management.dto.TaskComments;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;

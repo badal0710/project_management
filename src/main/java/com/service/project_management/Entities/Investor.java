@@ -38,8 +38,5 @@ public class Investor implements Serializable {
     @Column(name = "experience" )
     private String experience;
 
-    @Column(name = "invested_money")
-    private String InvestedMoney;
-
 
 }

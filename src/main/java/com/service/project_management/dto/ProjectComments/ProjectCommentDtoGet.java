@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class ProjectCommentDto {
+public class ProjectCommentDtoGet {
 
     @Id
     private Integer commentId;
@@ -25,6 +25,8 @@ public class ProjectCommentDto {
     private Integer projectId;
 
     private Integer investorId;
+
+    private Integer name;
 
 
 

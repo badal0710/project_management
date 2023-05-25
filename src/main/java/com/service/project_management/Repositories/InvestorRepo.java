@@ -13,4 +13,6 @@ public interface InvestorRepo extends JpaRepository<Investor,Integer> {
     @Query(value = "select investor_id from investor i where i.email= :email ",nativeQuery = true)
     Integer getInvestorId(@Param("email") String investorEmail);
 
+
+
 }

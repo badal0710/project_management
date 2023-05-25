@@ -1,6 +1,7 @@
 package com.service.project_management.Repositories;
 
 import com.service.project_management.Entities.Investor_Project;
+import com.service.project_management.Entities.Project;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -33,7 +34,18 @@ public interface Investor_ProjectRepo  extends JpaRepository<Investor_Project,In
 
 
 
+    @Query(value="SELECT  DISTINCT  p.project_id\n" +
+            "FROM investor_project p\n" +
+            "LEFT JOIN investor_project ip ON p.project_id = ip.project_id AND ip.investor_id = :i_id\n" +
+            "WHERE ip.project_id IS NULL;",nativeQuery = true)
+    List<Integer> findNotInvestedProject(@Param("i_id") Integer investorId);
 
+
+    @Query(value = "select * from investor_project p where p.status='pending'",nativeQuery = true)
+    List<Investor_Project> getPendingInvestmentRequest();
+
+//    @Query(value = "update investor_project s set status='approved' where s.investor_project_id= :i_id",nativeQuery = true)
+//    Investor_Project updateInvestmentStatus(@Param("i_id") Integer investor_projectId);
 
 
 }

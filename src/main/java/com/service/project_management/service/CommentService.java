@@ -1,20 +1,16 @@
 package com.service.project_management.service;
 
 
-import com.service.project_management.Entities.Comments;
-import com.service.project_management.Entities.Contractor;
-import com.service.project_management.Entities.Project;
-import com.service.project_management.Entities.TaskDetails;
-import com.service.project_management.Repositories.CommentRepo;
-import com.service.project_management.Repositories.ContractorRepo;
-import com.service.project_management.Repositories.TaskDetailRepo;
-import com.service.project_management.dto.CommentsDto;
-import com.service.project_management.dto.ProjectDto;
+import com.service.project_management.Entities.*;
+import com.service.project_management.Repositories.*;
+import com.service.project_management.dto.ProjectComments.ProjectCommentDto;
+import com.service.project_management.dto.ProjectComments.ProjectCommentDtoGet;
+import com.service.project_management.dto.TaskComments.CommentsDto;
+import com.service.project_management.dto.TaskComments.CommentsDtoGet;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +25,12 @@ public class CommentService {
     TaskDetailRepo taskDetailRepo;
     @Autowired
     private ContractorRepo contractorRepo;
+    @Autowired
+    private ProjectRepo projectRepo;
+    @Autowired
+    private InvestorRepo investorRepo;
+    @Autowired
+    private ProjectCommentsRepo projectCommentsRepo;
 
 
     public Comments createComments(CommentsDto commentsDto) {
@@ -48,21 +50,65 @@ public class CommentService {
 
     }
 
-    public List<CommentsDto> getCommentsOfTask(Integer taskId) {
+    public List<CommentsDtoGet> getCommentsOfTask(Integer taskId) {
         List<Comments> comments = commentRepo.getCommentsByTaskId(taskId);
 
-        List<CommentsDto> commentsDtos = comments.stream().map(pd -> this.commentToDto(pd)).collect(Collectors.toList());
+        List<CommentsDtoGet> commentsDtos = comments.stream().map(pd -> this.commentToDto(pd)).collect(Collectors.toList());
         return commentsDtos;
 
     }
 
-    public Comments dtoToComment(CommentsDto commentsDto) {
+
+    public ProjectComments createProjectComments(ProjectCommentDto projectCommentDto) {
+
+        ProjectComments projectComments=new ProjectComments();
+        projectComments.setComment_info(projectComments.getComment_info());
+
+        Project project=new Project();
+        project = projectRepo.getOneProject(projectCommentDto.getProjectId());
+
+        Investor investor=new Investor();
+
+        investor=investorRepo.getById(projectCommentDto.getInvestorId());
+        projectComments.setInvestor(investor);
+        projectComments.setProject(project);
+        projectCommentsRepo.save(projectComments);
+
+        return projectComments;
+
+    }
+
+    public List<ProjectCommentDtoGet> getProjectComment(Integer projectId) {
+        List<ProjectComments> comments = projectCommentsRepo.getCommentByProject(projectId);
+
+        List<ProjectCommentDtoGet> projectCommentDtos = comments.stream().map(pd -> this.projectCommnetToDto(pd)).collect(Collectors.toList());
+        return projectCommentDtos;
+
+    }
+
+
+
+
+
+
+
+
+    public ProjectCommentDtoGet projectCommnetToDto(ProjectComments projectComments){
+        ProjectCommentDtoGet commentsDto = this.modelMapper.map(projectComments, ProjectCommentDtoGet.class);
+        return commentsDto;
+    }
+
+
+
+
+
+    public Comments dtoToComment(CommentsDtoGet commentsDto) {
         Comments commentDto1 = this.modelMapper.map(commentsDto, Comments.class);
         return commentDto1;
     }
 
-    public CommentsDto commentToDto(Comments comments) {
-        CommentsDto commentsDto = this.modelMapper.map(comments, CommentsDto.class);
+    public CommentsDtoGet commentToDto(Comments comments) {
+        CommentsDtoGet commentsDto = this.modelMapper.map(comments, CommentsDtoGet.class);
         return commentsDto;
     }
 }

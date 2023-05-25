@@ -19,4 +19,6 @@ public class ProjectInvestor {
  
     private Integer invested_share;
 
+    private String status;
+
 }

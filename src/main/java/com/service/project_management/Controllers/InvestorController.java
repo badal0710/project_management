@@ -2,6 +2,7 @@ package com.service.project_management.Controllers;
 
 import com.service.project_management.Entities.Investor;
 import com.service.project_management.Entities.Investor_Project;
+import com.service.project_management.Entities.Project;
 import com.service.project_management.Repositories.InvestorRepo;
 import com.service.project_management.exceptions.resourceNotFoundException;
 import com.service.project_management.service.InvestorService;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -69,5 +71,18 @@ public class InvestorController {
             }
         }
     }
+
+
+
+
+    @GetMapping("/get-not-invested-projects/{investorId}")
+    public List<Project> getNotInvestedProjects(@PathVariable("investorId")Integer investorId){
+
+        List<Project> project=this.investorService.getNotInvestedProjects(investorId);
+        return ResponseEntity.ok().body(project).getBody();
+
+    }
+
+
 
 }

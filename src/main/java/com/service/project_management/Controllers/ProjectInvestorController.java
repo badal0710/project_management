@@ -2,16 +2,13 @@ package com.service.project_management.Controllers;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import com.service.project_management.dto.PendingInvestorProjectDto;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.service.project_management.Entities.Investor_Project;
 import com.service.project_management.Repositories.Investor_ProjectRepo;
@@ -28,6 +25,8 @@ public class ProjectInvestorController {
 
     @Autowired
     private InvestorService investorService;
+
+
 
     @GetMapping("/getAll")
     public ResponseEntity<Object> getAll(){
@@ -51,5 +50,30 @@ public class ProjectInvestorController {
             return status;
         }
     }
+
+
+    @GetMapping("/get-investment-request")
+    public ResponseEntity<Object> getRequestedProjectInvestment(){
+     List<PendingInvestorProjectDto> pendingInvestorProjectDtos=this.investorService.getInvestmentRequest();
+
+     return ResponseEntity.ok().body(pendingInvestorProjectDtos);
+
+
+    }
+
+    @PutMapping("/accept-investment/{investor_projectId}")
+    public ResponseEntity<String> updateInvestmentStatus(@PathVariable("investor_projectId") Integer investor_projectId ){
+        Optional<Investor_Project> investor_project = investor_ProjectRepo.findById(investor_projectId);
+        if(!investor_project.isPresent()){
+            throw new resourceNotFoundException("investor_projectId", "investor_project_ID", 404);
+        }else{
+            Investor_Project investor_project1= investorService.updateInvestmentStatus(investor_projectId);
+
+            return ResponseEntity.ok().body("Investment Status Updated Successfully");
+
+        }
+    }
+
+
 
 }

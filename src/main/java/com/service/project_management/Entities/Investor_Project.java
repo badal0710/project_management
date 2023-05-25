@@ -33,7 +33,10 @@ public class Investor_Project implements Serializable {
    @JoinColumn(referencedColumnName = "project_id",name="project_id")
    private Project project;
 
-   @Column(name = "invested_share" )
+   @Column(name = "invested_share")
    private Integer investedShare;
+
+   @Column(name="status")
+   private String Status;
 
 }

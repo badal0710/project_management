@@ -1,4 +1,4 @@
-package com.service.project_management.dto.ProjectComments;
+package com.service.project_management.dto.TaskComments;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class ProjectCommentDto {
+public class CommentsDtoGet {
 
     @Id
     private Integer commentId;
@@ -22,10 +22,11 @@ public class ProjectCommentDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate comment_date;
 
-    private Integer projectId;
+    private Integer TaskId;
 
-    private Integer investorId;
+    private Integer contractorId;
 
+    private String contractorName;
 
 
 

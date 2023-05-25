@@ -47,7 +47,7 @@ public class ProjectController {
 
     @PostMapping(value = "/create-project",produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponse(code = 500, message = "++++++++++++++++++")
-    public ResponseEntity<Object> createProject( @RequestBody @Valid ProjectDtoCreate projectDto) {
+    public ResponseEntity<Object> createProject(@RequestBody @Valid ProjectDtoCreate projectDto) {
 
 
         try {

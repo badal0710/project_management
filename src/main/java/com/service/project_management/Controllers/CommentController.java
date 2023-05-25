@@ -1,11 +1,14 @@
 package com.service.project_management.Controllers;
 
 import com.service.project_management.Entities.Comments;
-import com.service.project_management.Entities.Project;
-import com.service.project_management.Entities.TaskDetails;
+import com.service.project_management.Entities.ProjectComments;
 import com.service.project_management.Repositories.CommentRepo;
+import com.service.project_management.Repositories.ProjectCommentsRepo;
 import com.service.project_management.Repositories.TaskDetailRepo;
-import com.service.project_management.dto.CommentsDto;
+import com.service.project_management.dto.ProjectComments.ProjectCommentDto;
+import com.service.project_management.dto.ProjectComments.ProjectCommentDtoGet;
+import com.service.project_management.dto.TaskComments.CommentsDto;
+import com.service.project_management.dto.TaskComments.CommentsDtoGet;
 import com.service.project_management.exceptions.resourceNotFoundException;
 import com.service.project_management.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/comments")
@@ -26,6 +28,8 @@ public class CommentController {
     private TaskDetailRepo taskDetailRepo;
     @Autowired
     private CommentRepo commentRepo;
+    @Autowired
+    private ProjectCommentsRepo projectCommentsRepo;
 
 
     @PostMapping("/create-comment")
@@ -55,12 +59,50 @@ public class CommentController {
         if (comments==null) {
             throw new resourceNotFoundException("taskId", "taskId", taskId);
         } else {
-            List<CommentsDto> commentsForTask=commentService.getCommentsOfTask(taskId);
+            List<CommentsDtoGet> commentsForTask=commentService.getCommentsOfTask(taskId);
             return ResponseEntity.ok().body(commentsForTask);
         }
 
 
     }
+
+
+
+
+    @PostMapping("/create-project-comments")
+    ResponseEntity<Object> createProjectComments(@RequestBody ProjectCommentDto projectCommentDto) {
+
+        commentService.createProjectComments(projectCommentDto);
+        return ResponseEntity.ok().body("Comments Added Successfully");
+    }
+
+    @DeleteMapping("/delete-project-comments/{commentId}")
+    ResponseEntity<Object> deleteProjectCommment(@PathVariable("commentId")Integer commentId){
+
+        ProjectComments projectComment = projectCommentsRepo.getById(commentId);
+
+        if (projectComment==null) {
+            throw new resourceNotFoundException("comment", "commentId", commentId);
+        } else {
+            projectCommentsRepo.deleteById(commentId);
+            return ResponseEntity.ok().body("Comment Deleted Successfully!");
+        }
+    }
+
+    @GetMapping("/get-project-comment/{projectId}")
+    ResponseEntity<Object> getProjectComments(@PathVariable("projectId")Integer projectId){
+
+        ProjectComments projectComments=this.projectCommentsRepo.getById(projectId);
+        if (projectComments==null) {
+            throw new resourceNotFoundException("projectId", "projectId", projectId);
+        } else {
+            List<ProjectCommentDtoGet> commentsForTask=commentService.getProjectComment(projectId);
+            return ResponseEntity.ok().body(commentsForTask);
+        }
+
+
+    }
+
 
 
 
