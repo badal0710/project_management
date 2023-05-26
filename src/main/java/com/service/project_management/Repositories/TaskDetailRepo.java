@@ -10,6 +10,9 @@ import java.util.List;
 
 public interface TaskDetailRepo extends JpaRepository<TaskDetails,Integer> {
 
+    // @Modifying
+    // @Query(value = "update task_details set task_status= :status where task_id= :taskId",nativeQuery = true)
+    // int updatemyTaskStatus(@Param("taskId") Integer taskId ,@Param("status") String status);
 
     @Query(value = "select * from task_details td where td.project_id=:l_id",nativeQuery = true)
     List<TaskDetails>getProjectTaskDetail(@Param("l_id")Integer projectId); 

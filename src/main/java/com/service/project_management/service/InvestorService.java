@@ -78,7 +78,7 @@ public class InvestorService {
     public List<Project> getNotInvestedProjects(Integer investorId){
         List<Integer> projects=investor_ProjectRepo.findNotInvestedProject(investorId);
         List<Project> projectlist=new ArrayList<>();
-        System.out.println(projects);
+  
         for (Integer projectid: projects) {
         projectlist.add(projectRepo.getOneProject(projectid));
         }
@@ -95,7 +95,7 @@ public class InvestorService {
     public Integer createProjectInvestor(ProjectInvestorCreateDTO data, String email){
         int status = 0;
         try {
-            System.out.println(data);
+
             Investor_Project investor_Project = new Investor_Project();
             investor_Project.setInvestedShare(data.getAmount());
 
@@ -113,7 +113,7 @@ public class InvestorService {
 
             status = 200;
         } catch (Exception e) {
-            System.out.println("error while adding investor to project: "+e.getMessage());
+      
             status = 500;
         }
         return status;
@@ -136,13 +136,13 @@ public class InvestorService {
     }
 
     public Integer createInvestor(Investor investor) {
-        System.out.println(investor.getInvestedMoney());
+
         int status=0;
         try {
             investorRepo.save(investor);
             status=200;
         }catch (Exception e){
-            System.out.println("error while creating investor: "+e.getMessage());
+
             status=500;
         }
         return status;
@@ -158,7 +158,7 @@ public class InvestorService {
             investorRepo.deleteById(id);
             status=200;
         } catch (Exception e) {
-            System.out.println("error while deleting investor: "+e.getMessage());
+     
             status=500;
         }
         return status;

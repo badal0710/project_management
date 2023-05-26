@@ -200,14 +200,8 @@ public class ProjectService {
         for (int i = 0; i < taskIds.size() - 1; i++) {
 
             if (task.get(i + 1).getTaskStartingDate().isBefore(task.get(i).getTaskDeadLine())) {
-                System.out.println("found" + task.get(i + 1).getTaskId() + "id greater than " + task.get(i).getTaskId());
+    
                 Integer id = task.get(i + 1).getTaskId();
-//
-//                Integer id2=task.get(i).getTaskId();
-//                List<TaskDetailDto> responsev1 = taskD.stream().filter(t -> t.getTaskId() == id2).collect(Collectors.toList());
-//                for (TaskDetailDto dto : responsev1) {
-//                    result.add(dto);
-//                }
 
 
                 List<TaskDetailDto> responsev = taskD.stream().filter(t -> t.getTaskId() == id).collect(Collectors.toList());

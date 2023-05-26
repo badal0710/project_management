@@ -50,10 +50,7 @@ public class AuthController {
   @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser( @RequestBody String email) {
 
-    System.out.println(email);
     User user = userRepository.getuserpasswordbyEmail(email);
-    System.out.println(user.getUsername());
-    System.out.println(user.getPassword());
 
     Authentication authentication = authenticationManager.authenticate(
           new UsernamePasswordAuthenticationToken(user.getUsername(), "password"));

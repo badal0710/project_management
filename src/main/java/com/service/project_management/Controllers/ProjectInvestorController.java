@@ -68,7 +68,7 @@ public class ProjectInvestorController {
     @GetMapping("/getInvestedAmount/{email}/{projectid}")
     public ResponseEntity<Integer> getInvestedAmount(@PathVariable("email") String email,
             @PathVariable("projectid") Integer projectId) {
-        System.out.println(email + " = " + projectId);
+
         int investorId = investorRepo.getInvestorId(email);
         Integer data = this.investor_ProjectRepo.getInvestedAmount(investorId, projectId);
         return ResponseEntity.ok().body(data);

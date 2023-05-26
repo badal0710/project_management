@@ -90,7 +90,7 @@ public class ContractorService {
             this.contractorRepo.deleteById(contractorId);
             status=200;
         } catch (Exception e) {
-            System.out.println("error while deleting contractor: "+e.getMessage());
+
             status=500;
         }
         return status;

@@ -33,10 +33,8 @@ public class ContractorController {
 
     @PostMapping("/create-contractor")
     public Integer createContractor(@Valid @RequestBody Contractor contractor){
-        System.out.println(contractor);
         Integer status=this.contractorService.createContractor(contractor);
         return status;
-
     }
 
     @GetMapping("/allContractor")
