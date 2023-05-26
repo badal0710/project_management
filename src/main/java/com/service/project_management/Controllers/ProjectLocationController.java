@@ -26,6 +26,7 @@ public class ProjectLocationController {
 
     @Autowired
     ProjectLocationService projectLocationService;
+
     @Autowired
     private ProjectLocationRepo projectLocationRepo;
 
@@ -41,6 +42,11 @@ public class ProjectLocationController {
             return ResponseEntity.ok().body(Map.of("message", "success", "data", projectLocation));
         }
 
+    }
+
+    @GetMapping("/allLocation")
+    public List<ProjectLocation> allLocation() {
+        return projectLocationRepo.findAll();
     }
 
     // @DeleteMapping("/projectLocation/{id}")
