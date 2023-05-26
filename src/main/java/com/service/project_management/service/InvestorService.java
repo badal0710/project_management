@@ -1,8 +1,11 @@
 package com.service.project_management.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +16,9 @@ import com.service.project_management.Entities.Project;
 import com.service.project_management.Repositories.InvestorRepo;
 import com.service.project_management.Repositories.Investor_ProjectRepo;
 import com.service.project_management.Repositories.ProjectRepo;
+import com.service.project_management.dto.PendingInvestorProjectDto;
 import com.service.project_management.dto.ProjectInvestor;
+import com.service.project_management.dto.ProjectInvestorCreateDTO;
 
 @Service
 @RequestMapping("investor")
@@ -30,23 +35,79 @@ public class InvestorService {
 
     @Autowired
     private Investor_ProjectRepo investorProjectRepo;
+    
+    @Autowired
+    ModelMapper modelMapper;
+
+    public List<PendingInvestorProjectDto> getInvestmentRequest(){
+
+      
+
+        List<Investor_Project> investorProjectRepos=this.investor_ProjectRepo.getPendingInvestmentRequest();
+        
+        List<PendingInvestorProjectDto> investorProjects=investorProjectRepos.stream().map(td->this.InvestorProjectToDto(td)).collect(Collectors.toList());
+        return investorProjects;
+        }
+        
+        public Investor_Project updateInvestmentStatus(Integer investor_projectId){
+        
+        
+        
+        
+        Investor_Project investorProject=this.investor_ProjectRepo.getById(investor_projectId);
+        investorProject.setStatus("approved");
+        
+        return investor_ProjectRepo.save(investorProject);
+        }
+        
+        
+        //Entity to Dto
+        public PendingInvestorProjectDto InvestorProjectToDto(Investor_Project investorProject){
+        PendingInvestorProjectDto pendingInvestorProjectDto=this.modelMapper.map(investorProject,PendingInvestorProjectDto.class);
+        
+        pendingInvestorProjectDto.setInvestor_id(investorProject.getInvestor().getInvestorId());
+        pendingInvestorProjectDto.setProjectName(investorProject.getProject().getProjectName());
+        pendingInvestorProjectDto.setProject_id(investorProject.getProject().getProjectId());
+        pendingInvestorProjectDto.setInvested_share(investorProject.getInvestedShare());
+        pendingInvestorProjectDto.setName(investorProject.getProject().getProjectName());
+        pendingInvestorProjectDto.setInvestorProjectId(investorProject.getInvestorProjectId());
+        return pendingInvestorProjectDto;
+        }
+        
+
+    public List<Project> getNotInvestedProjects(Integer investorId){
+        List<Integer> projects=investor_ProjectRepo.findNotInvestedProject(investorId);
+        List<Project> projectlist=new ArrayList<>();
+        System.out.println(projects);
+        for (Integer projectid: projects) {
+        projectlist.add(projectRepo.getOneProject(projectid));
+        }
+        
+        return projectlist;
+        
+    }
 
     public List<Investor> getAllInvestor() {
         List<Investor> allproject = investorRepo.findAll();
         return allproject;
     }
 
-    public Integer createProjectInvestor(ProjectInvestor data){
+    public Integer createProjectInvestor(ProjectInvestorCreateDTO data, String email){
         int status = 0;
         try {
+            System.out.println(data);
             Investor_Project investor_Project = new Investor_Project();
-            investor_Project.setInvestedShare(data.getInvested_share());
+            investor_Project.setInvestedShare(data.getAmount());
 
-            Investor investor = investorRepo.getById(data.getInvestor_id());
+            Integer investorId = investorRepo.getInvestorId(email);
+
+            Investor investor = investorRepo.getById(investorId);
             investor_Project.setInvestor(investor);
 
-            Project p = projectRepo.getOneProject(data.getProject_id());
+            Project p = projectRepo.getOneProject(data.getProjectid());
             investor_Project.setProject(p);
+
+            investor_Project.setStatus("pending");
 
             investorProjectRepo.save(investor_Project);
 

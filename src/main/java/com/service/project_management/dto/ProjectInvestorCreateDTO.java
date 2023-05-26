@@ -11,14 +11,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class ProjectInvestor {
- 
-    private Integer investor_id;
- 
-    private Integer project_id;
- 
-    private Integer invested_share;
+public class ProjectInvestorCreateDTO {
 
-    private String status;
-
+    private Integer projectid;
+ 
+    private Integer amount;
 }

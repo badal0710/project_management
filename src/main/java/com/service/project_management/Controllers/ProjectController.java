@@ -84,7 +84,7 @@ public class ProjectController {
 
     @GetMapping("/getAllProjectOfOneInvestor/{investorEmail}")
         public ResponseEntity<Object> getAllProject(@PathVariable("investorEmail") String investorEmail) {
-        return ResponseEntity.ok().body(this.projectService.getAllProject(investorEmail));
+            return ResponseEntity.ok().body(this.projectService.getAllProject(investorEmail));
     }
 
     @PutMapping("/update-project/{projectId}")
