@@ -45,19 +45,20 @@ public class TaskDetailService {
         int status = 0;
         try {
             TaskDetails saveme = new TaskDetails(); 
-
-            Contractor c = contractorRepo.getOneContractor(taskDetail.getContractorId());
-            saveme.setContractor(c);
-
-            Project p = projectRepo.getOneProject(taskDetail.getContractorId());
+            
+            Project p = projectRepo.getOneProject(taskDetail.getProjectId());
             saveme.setProject(p);
-
+            Contractor contractor = new Contractor();
+            contractor = contractorRepo.getById(taskDetail.getContractorId());
+            saveme.setContractor(contractor);
+            saveme.setTaskStartingDate(taskDetail.getTaskStartingDate());
             saveme.setTaskDeadLine(taskDetail.getTaskDeadLine());
             saveme.setTaskName(taskDetail.getTaskName());
-            saveme.setTaskStatus(taskDetail.getTaskStatus());
-            saveme.setTaskStartingDate(taskDetail.getTaskStartingDate());
+            saveme.setTaskStatus(0);
             saveme.setAllocatedBudget(taskDetail.getAllocatedBudget());
+            
             taskDetailRepo.save(saveme);
+
             status =  200;
         } catch (Exception e) {
             status = 500;

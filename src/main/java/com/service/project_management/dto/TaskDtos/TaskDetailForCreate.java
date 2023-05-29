@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import javax.persistence.Id;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.service.project_management.Entities.Contractor;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,8 +20,8 @@ import lombok.Setter;
 @Data
 public class TaskDetailForCreate {
     
-    @Id
-    private  Integer TaskId;
+    // @Id
+    // private  Integer TaskId;
 
     private Integer projectId;
 
@@ -34,7 +35,7 @@ public class TaskDetailForCreate {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate taskDeadLine;
 
-    private  Integer taskStatus;
+    // private  Integer taskStatus;
 
     private Integer allocatedBudget;
 

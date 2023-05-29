@@ -2,13 +2,21 @@ package com.service.project_management.Repositories;
 
 import com.service.project_management.Entities.Investor_Project;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 public interface Investor_ProjectRepo extends JpaRepository<Investor_Project, Integer> {
+
+    @Modifying
+    @Transactional
+    @Query(value = "delete from investor_project where project_id=:p_id" ,nativeQuery=true)
+    void deleteByProjectId(@Param("p_id") Integer projectId);
 
     @Query(value = "select * from investor_project p where p.status='pending'",nativeQuery = true)
     List<Investor_Project> getPendingInvestmentRequest();
