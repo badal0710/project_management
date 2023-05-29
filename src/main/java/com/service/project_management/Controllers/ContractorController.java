@@ -53,12 +53,14 @@ public class ContractorController {
     }
 
     @DeleteMapping("/delete-contractor/{id}")
-    public Integer deleteContractor(@PathVariable("id") Integer contractorId){
-        Optional<Contractor> mycontractor = contractorRepo.findById(contractorId);
+    public Integer deleteContractor(@PathVariable("id") String contractorId){
+        System.out.println("cid: "+contractorId);
+        Integer id = Integer.parseInt(contractorId);
+        Optional<Contractor> mycontractor = contractorRepo.findById(id);
         if(!mycontractor.isPresent()){
-            throw new resourceNotFoundException("contractor", "contractorID", contractorId);
+            throw new resourceNotFoundException("contractor", "contractorID", id);
         }else{
-            int status = this.contractorService.deleteContractor(contractorId);
+            int status = this.contractorService.deleteContractor(id);
             return status;
         }
     }

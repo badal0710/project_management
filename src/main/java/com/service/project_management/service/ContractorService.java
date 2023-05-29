@@ -20,9 +20,11 @@ public class ContractorService {
 
 
     public Integer createContractor(Contractor contractor) {
+        System.out.println(contractor);
         int status = 0;
         try {
             contractorRepo.save(contractor);
+            
             status = 200;
         } catch (Exception e) {
             status = 500;
