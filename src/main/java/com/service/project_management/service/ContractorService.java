@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -18,10 +19,26 @@ public class ContractorService {
     ContractorRepo contractorRepo;
 
 
-    public Contractor createContractor(Contractor contractor) {
+    public Integer createContractor(Contractor contractor) {
+        System.out.println(contractor);
+        int status = 0;
+        try {
+            contractorRepo.save(contractor);
+            
+            status = 200;
+        } catch (Exception e) {
+            status = 500;
+        }
+        return status;
+    }
 
-        return contractorRepo.save(contractor);
+    public List<Contractor> getAllContractor() {
+        List<Contractor> allContractor = contractorRepo.findAll();
+        return allContractor;
+    }
 
+    public Integer countContractor() {
+        return contractorRepo.countContractor();
     }
 
 
@@ -68,13 +85,17 @@ public class ContractorService {
     }
 
 
-    public ResponseEntity<Boolean> deleteContractor(Integer contractorId) {
-        boolean isDeleted = false;
-
+    public Integer deleteContractor(Integer contractorId) {
+        
+        int status = 0;
+        try {
             this.contractorRepo.deleteById(contractorId);
-            isDeleted = true;
-            return ResponseEntity.ok(isDeleted);
+            status=200;
+        } catch (Exception e) {
 
+            status=500;
+        }
+        return status;
 
     }
 

@@ -10,9 +10,15 @@ import java.util.List;
 
 public interface TaskDetailRepo extends JpaRepository<TaskDetails,Integer> {
 
+    // @Modifying
+    // @Query(value = "update task_details set task_status= :status where task_id= :taskId",nativeQuery = true)
+    // int updatemyTaskStatus(@Param("taskId") Integer taskId ,@Param("status") String status);
 
     @Query(value = "select * from task_details td where td.project_id=:l_id",nativeQuery = true)
-    List<TaskDetails>getProjectTaskDetail(@Param("l_id")Integer projectId);
+    List<TaskDetails>getProjectTaskDetail(@Param("l_id")Integer projectId); 
+
+    @Query(value = "select * from task_details td where td.task_id=:l_id",nativeQuery = true)
+    TaskDetails getOneTaskDetail(@Param("l_id")Integer taskId); 
 
     @Query(value = "select * from task_details td where td.task_starting_date>=:s_id and td.task_deadline<=:e_id and td.project_id=:p_id",nativeQuery = true)
     List<TaskDetails> getTaskByDate(@Param("p_id")Integer projectId,@Param("s_id") String taskStartingDate,@Param("e_id")String taskDeadLine);

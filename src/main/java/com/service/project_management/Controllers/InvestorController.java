@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/investor")
 public class InvestorController {
@@ -21,6 +23,28 @@ public class InvestorController {
     InvestorService investorService;
     @Autowired
     InvestorRepo investorRepo;
+
+    @GetMapping("/allInvestor")
+        public ResponseEntity<Object> getAllInvestor() {
+        return ResponseEntity.ok().body(this.investorService.getAllInvestor());
+    }
+
+    @PostMapping("/create-investor")
+    public Integer createInvestor(@RequestBody Investor investor){
+        Integer status=this.investorService.createInvestor(investor);
+        return status;
+    }
+
+    @GetMapping("/totalInvestor")
+    public Integer totaInvestor(){
+        return investorService.countInvestor();
+    }
+
+    @DeleteMapping("/delete-investor/{id}")
+    public Integer deleteInvestor(@PathVariable("id") Integer Id){
+        Integer status = investorService.deleteInvestor(Id);
+        return status;
+    }
 
     @GetMapping("/{investorId}/")
     public ResponseEntity<Object> getProjects(@PathVariable Integer investorId,

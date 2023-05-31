@@ -18,7 +18,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @RestController
-
+@RequestMapping("/contractor")
 public class ContractorController {
 
     @Autowired
@@ -26,14 +26,21 @@ public class ContractorController {
     @Autowired
     ContractorRepo contractorRepo;
 
-    @PostMapping("/create-contractor")
-    public ResponseEntity<Contractor> createContractor(@Valid @RequestBody Contractor contractor){
-        Contractor createCategory=this.contractorService.createContractor(contractor);
-        return new ResponseEntity<Contractor>(HttpStatus.CREATED);
-
+    @GetMapping("/totalContractor")
+    public Integer totaContractor(){
+        return contractorService.countContractor();
     }
 
+    @PostMapping("/create-contractor")
+    public Integer createContractor(@Valid @RequestBody Contractor contractor){
+        Integer status=this.contractorService.createContractor(contractor);
+        return status;
+    }
 
+    @GetMapping("/allContractor")
+        public ResponseEntity<Object> getAllContractor() {
+        return ResponseEntity.ok().body(this.contractorService.getAllContractor());
+    }
 
     @PutMapping("/update-contractor/{id}")
     public Contractor contractorUpdateById(@PathVariable("id") Integer contractorId,@RequestBody Contractor contractor){
@@ -46,13 +53,15 @@ public class ContractorController {
     }
 
     @DeleteMapping("/delete-contractor/{id}")
-    public ResponseEntity<Object> deleteContractor(@PathVariable("id") Integer contractorId){
-        Optional<Contractor> mycontractor = contractorRepo.findById(contractorId);
+    public Integer deleteContractor(@PathVariable("id") String contractorId){
+        System.out.println("cid: "+contractorId);
+        Integer id = Integer.parseInt(contractorId);
+        Optional<Contractor> mycontractor = contractorRepo.findById(id);
         if(!mycontractor.isPresent()){
-            throw new resourceNotFoundException("contractor", "contractorID", contractorId);
+            throw new resourceNotFoundException("contractor", "contractorID", id);
         }else{
-            this.contractorService.deleteContractor(contractorId);
-            return ResponseEntity.ok().body("Contractor is deleted");
+            int status = this.contractorService.deleteContractor(id);
+            return status;
         }
     }
 }
