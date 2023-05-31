@@ -15,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,11 +69,9 @@ public class ProjectService {
     }
 
 
-    public Optional<ProjectDto> updateProjectById(Integer projectId, ProjectDto projectDto) {
+    public String updateProjectById(Integer projectId, ProjectDtoCreate projectDto) {
 
-
-        Project project1 = this.projectRepo.findById(projectId).get();
-
+        Project project1 = projectRepo.findById(projectId).get();
 
         if (Objects.nonNull(projectDto.getProjectName())
                 && !"".equalsIgnoreCase(projectDto.getProjectName())) {
@@ -88,12 +87,12 @@ public class ProjectService {
 
         if (Objects.nonNull(projectDto.getProjectDeadline())
                 && !"".equalsIgnoreCase(String.valueOf(projectDto.getProjectDeadline()))) {
-            project1.setProjectDeadline(projectDto.getProjectDeadline());
+            project1.setProjectDeadline(LocalDate.parse(projectDto.getProjectDeadline()));
         }
 
         if (Objects.nonNull(projectDto.getProjectStartingDate())
                 && !"".equalsIgnoreCase(String.valueOf(projectDto.getProjectStartingDate()))) {
-            project1.setProjectStartingDate(projectDto.getProjectStartingDate());
+            project1.setProjectStartingDate(LocalDate.parse(projectDto.getProjectStartingDate()));
         }
 
         if (Objects.nonNull(projectDto.getProjectTypeName())
@@ -104,17 +103,15 @@ public class ProjectService {
         if (Objects.nonNull(projectDto.getProjectLocationId())
                 && !"".equalsIgnoreCase(String.valueOf(projectDto.getProjectLocationId()))) {
 
-            ProjectLocation pro = new ProjectLocation();
-            pro.setProjectLocationId(projectDto.getProjectLocationId());
-            pro.setArea(projectDto.getArea());
-            pro.setCity(projectDto.getCity());
-            pro.setState(projectDto.getState());
+            ProjectLocation pro = projectLocationRepo.findLocationById(projectDto.getProjectLocationId());
             project1.setProjectLocation(pro);
 
-
         }
-        Project project2 = this.projectRepo.save(project1);
-        return Optional.ofNullable(this.modelMapper.map(project2, ProjectDto.class));
+        try {
+            projectRepo.save(project1);
+        } catch (Exception e) {
+        }
+        return "success";
 
     }
 
@@ -200,14 +197,8 @@ public class ProjectService {
         for (int i = 0; i < taskIds.size() - 1; i++) {
 
             if (task.get(i + 1).getTaskStartingDate().isBefore(task.get(i).getTaskDeadLine())) {
-                System.out.println("found" + task.get(i + 1).getTaskId() + "id greater than " + task.get(i).getTaskId());
+    
                 Integer id = task.get(i + 1).getTaskId();
-//
-//                Integer id2=task.get(i).getTaskId();
-//                List<TaskDetailDto> responsev1 = taskD.stream().filter(t -> t.getTaskId() == id2).collect(Collectors.toList());
-//                for (TaskDetailDto dto : responsev1) {
-//                    result.add(dto);
-//                }
 
 
                 List<TaskDetailDto> responsev = taskD.stream().filter(t -> t.getTaskId() == id).collect(Collectors.toList());
@@ -231,8 +222,8 @@ public class ProjectService {
         
         Project project=new Project();
         project.setProjectName(projectDto.getProjectName());
-        project.setProjectDeadline(projectDto.getProjectDeadline());
-        project.setProjectStartingDate(projectDto.getProjectStartingDate());
+        project.setProjectDeadline(LocalDate.parse(projectDto.getProjectDeadline()));
+        project.setProjectStartingDate(LocalDate.parse(projectDto.getProjectStartingDate()));
         project.setProjectStatus(projectDto.getProjectStatus());
         project.setProjectTypeName(projectDto.getProjectTypeName());
         project.setProjectLocation(projectLocation);

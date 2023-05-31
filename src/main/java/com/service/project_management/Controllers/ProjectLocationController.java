@@ -26,6 +26,7 @@ public class ProjectLocationController {
 
     @Autowired
     ProjectLocationService projectLocationService;
+
     @Autowired
     private ProjectLocationRepo projectLocationRepo;
 
@@ -43,12 +44,10 @@ public class ProjectLocationController {
 
     }
 
-    // @DeleteMapping("/projectLocation/{id}")
-    // public String deleteByProjectLocation(@PathVariable("id") Integer
-    // projectLocationId){
-    // projectLocationService.deleteByProjectLocation(projectLocationId);
-    // return "Department deleted successfully";
-    // }
+    @GetMapping("/allLocation")
+    public List<ProjectLocation> allLocation() {
+        return projectLocationRepo.findAll();
+    }
 
     @DeleteMapping("/projectLocation/{id}")
     public String deleteByProjectLocation(@PathVariable("id") Integer projectLocationId) {

@@ -1,11 +1,10 @@
 package com.service.project_management.Controllers;
-
-import com.service.project_management.CustomValidation.ValidateProjectStatus;
 import com.service.project_management.Entities.Investor;
 import com.service.project_management.Entities.Investor_Project;
 import com.service.project_management.Entities.Project;
 import com.service.project_management.Entities.TaskDetails;
 import com.service.project_management.Repositories.InvestorRepo;
+import com.service.project_management.Repositories.Investor_ProjectRepo;
 import com.service.project_management.Repositories.ProjectRepo;
 import com.service.project_management.dto.ProjectDto;
 import com.service.project_management.dto.ProjectDtoCreate;
@@ -16,7 +15,6 @@ import com.service.project_management.service.InvestorService;
 import com.service.project_management.service.ProjectService;
 import io.swagger.annotations.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -42,16 +40,17 @@ public class ProjectController {
     @Autowired
     ProjectService projectService;
     @Autowired
-    private ProjectRepo projectRepo;
+    ProjectRepo projectRepo;
 
+    @Autowired
+    Investor_ProjectRepo investor_ProjectRepo;
 
-    @PostMapping(value = "/create-project",produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/create-project", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponse(code = 500, message = "++++++++++++++++++")
     public ResponseEntity<Object> createProject(@RequestBody @Valid ProjectDtoCreate projectDto) {
-
-
+      
         try {
-            Project createProject = this.projectService.createProject(projectDto);
+            projectService.createProject(projectDto);
             return ResponseEntity.ok(HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Unable to create project " + e);
@@ -59,7 +58,7 @@ public class ProjectController {
     }
 
     @GetMapping("/totalProject")
-    public Integer totaProject(){
+    public Integer totaProject() {
         return projectRepo.countProject();
     }
 
@@ -83,23 +82,30 @@ public class ProjectController {
     }
 
     @GetMapping("/getAllProjectOfOneInvestor/{investorEmail}")
-        public ResponseEntity<Object> getAllProject(@PathVariable("investorEmail") String investorEmail) {
+    public ResponseEntity<Object> getAllProject(@PathVariable("investorEmail") String investorEmail) {
         return ResponseEntity.ok().body(this.projectService.getAllProject(investorEmail));
     }
 
     @PutMapping("/update-project/{projectId}")
-    public ResponseEntity<Object> updateProject(@PathVariable("projectId") Integer projectId,
-            @RequestBody @Valid ProjectDto projectDto) throws Exception {
-        Optional<ProjectDto> project1 = projectService.updateProjectById(projectId, projectDto);
-        return ResponseEntity.ok(HttpStatus.OK);
+    public ResponseEntity<Object> updateProject(@PathVariable("projectId") String projectId,
+            @RequestBody ProjectDtoCreate projectDto) throws Exception {
+        Integer Id = Integer.parseInt(projectId);
+        String result = projectService.updateProjectById(Id, projectDto);
+        if (result.equals("success")) {
+            return ResponseEntity.ok(HttpStatus.OK);
+        } else {
+            return ResponseEntity.ok(HttpStatus.NOT_ACCEPTABLE);
+        }
     }
 
     @DeleteMapping("/delete-project/{projectId}")
-    public ResponseEntity<?> deleteProject(@PathVariable Integer projectId) {
+    public ResponseEntity<Object> deleteProject(@PathVariable Integer projectId) {
         try {
-            this.projectRepo.deleteById(projectId);
+            investor_ProjectRepo.deleteByProjectId(projectId);
+            projectRepo.deleteById(projectId);
             return ResponseEntity.ok().body("project is deleted");
         } catch (Exception e) {
+            System.out.println("error: " + e.getMessage());
             return ResponseEntity.badRequest().body("unable to delete project");
         }
     }
@@ -177,11 +183,11 @@ public class ProjectController {
         }
 
     }
-        @GetMapping("/project-task-dependency/{projectId}")
-        public ResponseEntity<Object> getDependantTask (@PathVariable("projectId") Integer projectId){
-            List<TaskDetailDto> taskList = projectService.getTaskWithDependency(projectId);
-            return ResponseEntity.ok().body(taskList);
-        }
 
+    @GetMapping("/project-task-dependency/{projectId}")
+    public ResponseEntity<Object> getDependantTask(@PathVariable("projectId") Integer projectId) {
+        List<TaskDetailDto> taskList = projectService.getTaskWithDependency(projectId);
+        return ResponseEntity.ok().body(taskList);
+    }
 
 }

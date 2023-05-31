@@ -28,30 +28,6 @@ public class TaskDetailController {
     @Autowired
     ProjectService projectService;
 
-    // @GetMapping("/{projectId}/")
-    // public ResponseEntity<Object> getTaskDetail(@PathVariable Integer projectId){
-    //
-    //
-    // List<TaskDetails> Taskofproject =
-    // taskDetailService.getTaskDetailOfProject(projectId);
-    //
-    // return
-    // ResponseEntity.ok().body(Map.of("message","success","data",Taskofproject));
-    //
-    // }
-    //
-    // @GetMapping("/requireDetail/{projectId}/")
-    // public ResponseEntity<Object> getDetail(@PathVariable Integer projectId){
-    //
-    //
-    // List<TaskDetailDto> Taskofproject1 =
-    // taskDetailService.getSomeDetail(projectId);
-    //
-    // return
-    // ResponseEntity.ok().body(Map.of("taskName","success","data",Taskofproject1));
-    //
-    // }
-
     @GetMapping("/all-task")
     public List<TaskDetails> getOneTask() {
         return taskDetailService.allTask();
@@ -70,14 +46,14 @@ public class TaskDetailController {
     }
 
     @PutMapping("/update-task/{taskId}")
-    public Integer updateTask(@PathVariable("taskId") Integer taskId, @RequestBody TaskDetailDto taskDetailDto) {
-        Optional<TaskDetails> mytaskdetail = taskDetailRepo.findById(taskId);
-        if (!mytaskdetail.isPresent()) {
-            throw new resourceNotFoundException("TaskDetail", "TaskID", taskId);
-        } else {
-            taskDetailService.updateTask(taskId, taskDetailDto);
-            return 200;
-        }
+
+    public ResponseEntity<Object> updateTask(@PathVariable("taskId") Integer taskId,
+            @RequestBody TaskDetailDto taskDetailDto) {
+
+        Optional<TaskDetailDto> taskdetailupdate = taskDetailService.updateTask(taskId, taskDetailDto);
+
+        return ResponseEntity.ok(taskdetailupdate);
+
     }
 
     @DeleteMapping("/delete-task/{taskId}")

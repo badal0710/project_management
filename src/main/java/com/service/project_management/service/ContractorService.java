@@ -20,9 +20,11 @@ public class ContractorService {
 
 
     public Integer createContractor(Contractor contractor) {
+        System.out.println(contractor);
         int status = 0;
         try {
             contractorRepo.save(contractor);
+            
             status = 200;
         } catch (Exception e) {
             status = 500;
@@ -90,7 +92,7 @@ public class ContractorService {
             this.contractorRepo.deleteById(contractorId);
             status=200;
         } catch (Exception e) {
-            System.out.println("error while deleting contractor: "+e.getMessage());
+
             status=500;
         }
         return status;

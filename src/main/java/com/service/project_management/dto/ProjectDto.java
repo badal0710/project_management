@@ -44,7 +44,7 @@ public class ProjectDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate projectDeadline;
 
-    @NotNull(message = "pleae")
+    @NotNull(message = "Plese Specify Type Of Project")
     private String projectTypeName;
 
 

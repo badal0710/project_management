@@ -28,19 +28,17 @@ public class ProjectDtoCreate {
     private Integer projectStatus;
 
 
-    private  String projectName;
+    private String projectName;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate projectStartingDate;
+    private String projectStartingDate;
 
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate projectDeadline;
+    private String projectDeadline;
 
 
     private String projectTypeName;
-
-
 
     private Integer projectLocationId;
 

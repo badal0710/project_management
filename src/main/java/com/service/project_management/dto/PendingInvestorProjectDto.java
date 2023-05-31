@@ -13,19 +13,17 @@ import java.net.Inet4Address;
 @Data
 public class PendingInvestorProjectDto {
 
+private Integer investorProjectId;
 
+private Integer investor_id;
 
-    private Integer investorProjectId;
+private Integer project_id;
 
-    private Integer investor_id;
+private String name;
 
-    private Integer project_id;
+private String projectName;
 
-    private String name;
-
-    private  String projectName;
-
-    private Integer invested_share;
+private Integer invested_share;
 
 
 
