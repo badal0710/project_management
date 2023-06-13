@@ -16,7 +16,7 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/investor")
+@RequestMapping("/apii/investor")
 public class InvestorController {
 
     @Autowired

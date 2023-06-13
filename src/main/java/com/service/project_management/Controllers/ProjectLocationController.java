@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/projectbylocation")
+@RequestMapping("/apii/projectbylocation")
 public class ProjectLocationController {
 
     @Autowired

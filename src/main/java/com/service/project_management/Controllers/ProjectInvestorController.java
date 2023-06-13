@@ -26,7 +26,7 @@ import com.service.project_management.exceptions.resourceNotFoundException;
 import com.service.project_management.service.InvestorService;
 
 @RestController
-@RequestMapping("/projectInvestor")
+@RequestMapping("/apii/projectInvestor")
 public class ProjectInvestorController {
 
     @Autowired

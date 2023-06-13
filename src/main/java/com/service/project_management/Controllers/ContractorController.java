@@ -18,7 +18,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/contractor")
+@RequestMapping("/apii/contractor")
 public class ContractorController {
 
     @Autowired
