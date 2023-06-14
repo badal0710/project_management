@@ -59,7 +59,7 @@ pipeline {
                 script{
                     def mypom = readMavenPom file: 'pom.xml'
                     def myversion = mypom.version.toLowerCase()
-                    def myname = mypom.artifactId
+                    def myname = mypom.artifactId.toLowerCase()
                     bat "git checkout prod & docker image build -t manojkapure/${myname}:${myversion} ."  
                     // docker login -u manojkapure -p <your-password>  // write code in terminal so that you can push image               
                     bat "git checkout prod & docker image push manojkapure/${myname}:${myversion}"
