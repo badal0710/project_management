@@ -11,14 +11,14 @@ pipeline {
         stage ('Proccessing') {
             steps {
                 script {
-                    bat 'git merge origin/dev'
+                    bat 'git checkout qa & git merge origin/dev'
                 }
             }   
         }
         stage ('Done') {
             steps {
                 script {
-                    bat 'git push --set-upstream origin qa'
+                    bat 'git checkout qa & git push --set-upstream origin qa'
                 }
             }   
         }

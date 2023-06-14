@@ -11,21 +11,21 @@ pipeline {
         stage ('Proccessing') {
             steps {
                 script {
-                    bat 'git merge origin/qa'
+                    bat 'git checkout prod & git merge origin/qa'
                 }
             }   
         }
         stage ('Deploy to Prod') {
             steps {
                 script {
-                    bat 'git push --set-upstream origin prod'
+                    bat 'git checkout prod & git push --set-upstream origin prod'
                 }
             }   
         }
         stage ('creating Jar file') {
             steps {
                 script {
-                    bat 'mvn clean install'
+                    bat 'git checkout prod & mvn clean install'
                 }
             }
         }
@@ -45,7 +45,7 @@ pipeline {
                         ]
                     ], 
                     credentialsId: 'nexus-auth', 
-                    groupId: 'com.example', 
+                    groupId: 'com.service', 
                     nexusUrl: 'localhost:8081', 
                     nexusVersion: 'nexus3', 
                     protocol: 'http', 
@@ -60,9 +60,9 @@ pipeline {
                     def mypom = readMavenPom file: 'pom.xml'
                     def myversion = mypom.version.toLowerCase()
                     def myname = mypom.artifactId
-                    bat "docker image build -t manojkapure/${myname}:${myversion} ."  
+                    bat "git checkout prod & docker image build -t manojkapure/${myname}:${myversion} ."  
                     // docker login -u manojkapure -p <your-password>  // write code in terminal so that you can push image               
-                    bat "docker image push manojkapure/${myname}:${myversion}"
+                    bat "git checkout prod & docker image push manojkapure/${myname}:${myversion}"
                    //bat 'currently push is disabled'          
                 }
             }
