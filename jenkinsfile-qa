@@ -1,0 +1,37 @@
+pipeline {
+    agent any
+    stages {
+        stage ('Start') {
+            steps {
+                script {
+                    git branch: 'qa', url: 'https://github.com/badal0710/project_management.git'
+                }
+            }
+        }
+        stage ('Proccessing') {
+            steps {
+                script {
+                    bat 'git merge origin/dev'
+                }
+            }   
+        }
+        stage ('Done') {
+            steps {
+                script {
+                    bat 'git push --set-upstream origin qa'
+                }
+            }   
+        }
+    }
+    post {
+        failure {
+            emailext(
+                to: 'manojkapure100@gmail.com', // Email address of the recipient
+                subject: "Build failed: ${currentBuild.fullDisplayName}", // Subject of the email
+                body: "The build has failed. Please check the Jenkins console for more details.", // Body of the email
+                mimeType: 'text/plain' // Mime type of the email
+                // hello
+            )
+        }
+    }
+}

@@ -1,0 +1,81 @@
+pipeline {
+    agent any
+    stages {
+        stage ('Start') {
+            steps {
+                script {
+                    git branch: 'prod', url: 'https://github.com/badal0710/project_management.git'
+                }
+            }
+        }
+        stage ('Proccessing') {
+            steps {
+                script {
+                    bat 'git merge origin/qa'
+                }
+            }   
+        }
+        stage ('Deploy to Prod') {
+            steps {
+                script {
+                    bat 'git push --set-upstream origin prod'
+                }
+            }   
+        }
+        stage ('creating Jar file') {
+            steps {
+                script {
+                    bat 'mvn clean install'
+                }
+            }
+        }
+        stage('upload jar to nexus'){
+            steps{
+                script{
+                    def pomFile = readMavenPom file: 'pom.xml'
+                    def myversion = pomFile.version
+                    def myrepository = myversion.endsWith("SNAPSHOT") ? "ProjectManagenet-backend-snapshot" : "ProjectManagenet-backend-realise"
+                    nexusArtifactUploader artifacts: 
+                    [
+                        [
+                            artifactId: 'springboot', 
+                            classifier: '', 
+                            file: 'target/ProjectManagementBackend.jar', 
+                            type: 'jar'
+                        ]
+                    ], 
+                    credentialsId: 'nexus-auth', 
+                    groupId: 'com.example', 
+                    nexusUrl: 'localhost:8081', 
+                    nexusVersion: 'nexus3', 
+                    protocol: 'http', 
+                    repository: myrepository, 
+                    version: "${myversion}"
+                }
+            }
+        }
+        stage('build & publish docker Image to DockerHub'){
+            steps{
+                script{
+                    def mypom = readMavenPom file: 'pom.xml'
+                    def myversion = mypom.version.toLowerCase()
+                    def myname = mypom.artifactId
+                    bat "docker image build -t manojkapure/${myname}:${myversion} ."  
+                    // docker login -u manojkapure -p <your-password>  // write code in terminal so that you can push image               
+                    bat "docker image push manojkapure/${myname}:${myversion}"
+                   //bat 'currently push is disabled'          
+                }
+            }
+        }
+    }
+    post {
+        failure {
+            emailext(
+                to: 'manojkapure100@gmail.com', // Email address of the recipient
+                subject: "Build failed: ${currentBuild.fullDisplayName}", // Subject of the email
+                body: "The build has failed. Please check the Jenkins console for more details.", // Body of the email
+                mimeType: 'text/plain' // Mime type of the email
+            )
+        }
+    }
+}

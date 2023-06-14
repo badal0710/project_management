@@ -1,0 +1,59 @@
+pipeline{
+    agent any 
+    stages {  
+        stage('Git Checkout'){    
+            steps{       
+                script{          
+                    git branch: 'dev', url: 'https://github.com/badal0710/project_management.git'
+                }
+            }
+        }
+        stage('UNIT testing'){   
+            steps{
+                script{
+                    bat 'mvn test'
+                }
+            }
+        }
+        stage('Integration testing'){
+            steps{
+                script{  
+                    bat 'mvn verify -DskipUnitTests'
+                }
+            }
+        }
+        stage('Maven build'){
+            steps{
+                script{  
+                    bat 'mvn clean install'
+                }
+            }
+        }
+        stage('Static code analysis'){
+            steps{
+                script{  
+                    withSonarQubeEnv(credentialsId: 'jenkins-sonarqube-integration-by-sonar-global-token') { 
+                        bat 'mvn clean package sonar:sonar'
+                    }
+                }
+            }
+        }
+        stage('Quality Gate Status'){
+            steps{
+               script{      
+                    waitForQualityGate abortPipeline: false
+                }
+            }
+        }
+    } 
+    post {
+        failure {
+            emailext(
+                to: 'manojkapure100@gmail.com', // Email address of the recipient
+                subject: "Build failed: ${currentBuild.fullDisplayName}", // Subject of the email
+                body: "The build has failed. Please check the Jenkins console for more details.", // Body of the email
+                mimeType: 'text/plain' // Mime type of the email
+            )
+        }
+    }  
+}
