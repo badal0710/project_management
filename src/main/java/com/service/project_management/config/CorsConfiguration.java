@@ -13,8 +13,8 @@ public class CorsConfiguration {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/*/**")
-                    .allowedOrigins("")
-                    .allowedMethods("")
+                .allowedOrigins("https://dxmsjilz0lci1.cloudfront.net/","http://99.80.152.125/","https://99.80.152.125/","http://ec2-99-80-152-125.eu-west-1.compute.amazonaws.com/","http://ec2-99-80-152-125.eu-west-1.compute.amazonaws.com","http://ec2-99-80-152-125.eu-west-1.compute.amazonaws.com/myapi/","https://ec2-99-80-152-125.eu-west-1.compute.amazonaws.com/","https://d1sxv3odgzkhr7.cloudfront.net/","http://localhost:80/","https://localhost:80/","http://localhost:4200/","https://localhost:4200/")
+                .allowedMethods("GET", "POST", "PUT", "DELETE")
                     .allowedHeaders("*")
                     .allowCredentials(true)
                     .maxAge(3600);
