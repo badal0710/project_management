@@ -132,8 +132,18 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
-					<finalName>ProjectManagementBackend</finalName>
 				</configuration>
+				<executions>
+                	<execution>
+                    	<id>repackage</id>
+                    	<goals>
+                        	<goal>repackage</goal>
+                    	</goals>
+                    	<configuration>
+                        	<finalName>ProjectManagementBackend</finalName>
+                    	</configuration>
+                	</execution>
+            	</executions>
 			</plugin>
 		</plugins>
 	</build>
