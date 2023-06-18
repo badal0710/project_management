@@ -26,12 +26,14 @@ pipeline {
     }
     post {
         failure {
-            emailext(
-                to: 'manojkapure100@gmail.com', // Email address of the recipient
-                subject: "Build failed: ${currentBuild.fullDisplayName}", // Subject of the email
-                body: "The build has failed. Please check the Jenkins console for more details.", // Body of the email
-                mimeType: 'text/plain' // Mime type of the email
-                // hello
+            emailext (
+                to: 'manojkapure100@gmail.com',
+                subject: "Pipeline Failed: ${currentBuild.fullDisplayName}",
+                body: '''<p>The pipeline has failed.</p>
+                         <p>Build Number: ${currentBuild.number}</p>
+                         <p>Build Status: ${currentBuild.result}</p>
+                         <p>Build URL: ${env.BUILD_URL}</p>''',
+                mimeType: 'text/html'
             )
         }
     }
